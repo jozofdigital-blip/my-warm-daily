@@ -113,7 +113,7 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
             <div className="space-y-6 relative">
               <button
                 onClick={onComplete}
-                className="absolute -top-2 -right-2 p-2 rounded-full hover:bg-muted/50 transition-colors"
+                className="absolute top-0 right-0 p-2 rounded-full hover:bg-muted/50 transition-colors z-10"
                 aria-label="Закрыть"
               >
                 <X className="w-5 h-5 text-muted-foreground" />
