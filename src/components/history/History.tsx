@@ -68,32 +68,27 @@ export const History = ({ onBack }: HistoryProps) => {
               Смотри, как менялось настроение
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex gap-2">
-              <Button 
-                onClick={() => setPeriod('week')} 
-                variant={period === 'week' ? 'default' : 'outline'}
-                size="sm"
-              >
-                Неделя
-              </Button>
-              <Button 
-                onClick={() => setPeriod('month')} 
-                variant={period === 'month' ? 'default' : 'outline'}
-                size="sm"
-              >
-                Месяц
-              </Button>
-              <Button 
-                onClick={() => setPeriod('all')} 
-                variant={period === 'all' ? 'default' : 'outline'}
-                size="sm"
-              >
-                Всё время
-              </Button>
-            </div>
-            <Button onClick={onBack} variant="outline">
-              ← Назад
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => setPeriod('week')} 
+              variant={period === 'week' ? 'default' : 'outline'}
+              size="sm"
+            >
+              Неделя
+            </Button>
+            <Button 
+              onClick={() => setPeriod('month')} 
+              variant={period === 'month' ? 'default' : 'outline'}
+              size="sm"
+            >
+              Месяц
+            </Button>
+            <Button 
+              onClick={() => setPeriod('all')} 
+              variant={period === 'all' ? 'default' : 'outline'}
+              size="sm"
+            >
+              Всё время
             </Button>
           </div>
         </div>
@@ -194,6 +189,13 @@ export const History = ({ onBack }: HistoryProps) => {
             </div>
           </Card>
         )}
+
+        {/* Back Button */}
+        <div className="flex justify-center pb-6">
+          <Button onClick={onBack} variant="outline" size="lg" className="min-w-[200px]">
+            ← Назад в меню
+          </Button>
+        </div>
       </div>
     </div>
   );

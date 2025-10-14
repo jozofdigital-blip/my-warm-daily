@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { MOOD_LABELS, ACTIVITIES, POSITIVE_MESSAGES, CheckIn, Mood } from '@/types/checkin';
+import { MOOD_LABELS, ACTIVITIES, POSITIVE_MESSAGES, CheckIn, Mood, FOCUS_OPTIONS } from '@/types/checkin';
 import { cn } from '@/lib/utils';
 import { addCheckIn, loadUserData } from '@/lib/storage';
 
@@ -18,14 +18,21 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
   const [note, setNote] = useState('');
   const [message, setMessage] = useState('');
 
-  // Фильтруем активности на основе выбранных фокусов
-  const filteredActivities = useMemo(() => {
+  // Группируем активности по выбранным фокусам пользователя
+  const groupedActivities = useMemo(() => {
     const userData = loadUserData();
-    if (!userData || !userData.focuses.length) return ACTIVITIES;
+    if (!userData || !userData.focuses.length) return [];
     
-    return ACTIVITIES.filter(activity => 
-      activity.focuses.some(focus => userData.focuses.includes(focus))
-    );
+    return userData.focuses.map(focusId => {
+      const focus = FOCUS_OPTIONS.find(f => f.id === focusId);
+      const focusActivities = ACTIVITIES.filter(activity => 
+        activity.focuses.includes(focusId)
+      );
+      return {
+        focus,
+        activities: focusActivities
+      };
+    }).filter(group => group.activities.length > 0);
   }, []);
 
   const toggleActivity = (id: string) => {
@@ -126,14 +133,24 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
                   </button>
                 ))}
               </div>
-              <Button
-                onClick={() => setStep('activities')}
-                disabled={!mood}
-                size="lg"
-                className="w-full h-12 bg-primary hover:bg-primary/90"
-              >
-                Далее ➜
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  onClick={onComplete}
+                  size="lg"
+                  variant="outline"
+                  className="flex-1 h-12"
+                >
+                  ← Назад
+                </Button>
+                <Button
+                  onClick={() => setStep('activities')}
+                  disabled={!mood}
+                  size="lg"
+                  className="flex-1 h-12 bg-primary hover:bg-primary/90"
+                >
+                  Далее ➜
+                </Button>
+              </div>
             </div>
           )}
 
@@ -142,22 +159,32 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
               <p className="text-center text-muted-foreground">
                 Что было сегодня? (до 10 пунктов)
               </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-2">
-                {filteredActivities.map(activity => (
-                  <button
-                    key={activity.id}
-                    onClick={() => toggleActivity(activity.id)}
-                    className={cn(
-                      "flex items-center gap-2 p-3 rounded-xl border-2 transition-all text-left",
-                      "hover:shadow-md hover:scale-[1.02]",
-                      activities.includes(activity.id)
-                        ? "border-primary bg-primary/5 shadow-md"
-                        : "border-border bg-card hover:border-primary/50"
-                    )}
-                  >
-                    <span className="text-xl">{activity.emoji}</span>
-                    <span className="text-sm">{activity.label}</span>
-                  </button>
+              <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                {groupedActivities.map(({ focus, activities: focusActivities }) => (
+                  <div key={focus!.id} className="space-y-3">
+                    <div className="flex items-center gap-2 text-foreground/80 font-medium">
+                      <span className="text-xl">{focus!.emoji}</span>
+                      <span className="text-sm">{focus!.label}</span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pl-2">
+                      {focusActivities.map(activity => (
+                        <button
+                          key={activity.id}
+                          onClick={() => toggleActivity(activity.id)}
+                          className={cn(
+                            "flex items-center gap-2 p-2.5 rounded-lg border-2 transition-all text-left",
+                            "hover:shadow-md hover:scale-[1.02]",
+                            activities.includes(activity.id)
+                              ? "border-primary bg-primary/5 shadow-md"
+                              : "border-border bg-card hover:border-primary/50"
+                          )}
+                        >
+                          <span className="text-base">{activity.emoji}</span>
+                          <span className="text-xs leading-tight">{activity.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
               <div className="flex gap-3">
