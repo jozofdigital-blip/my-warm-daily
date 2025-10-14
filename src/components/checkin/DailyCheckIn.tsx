@@ -100,7 +100,17 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-b from-background to-muted/30">
-      <div className="w-full max-w-2xl animate-fade-in">
+      <div className="w-full max-w-2xl animate-fade-in relative">
+        {step === 'mood' && (
+          <button
+            onClick={onComplete}
+            className="absolute top-0 right-0 p-2 rounded-full hover:bg-muted/50 transition-colors z-10"
+            aria-label="Закрыть"
+          >
+            <X className="w-5 h-5 text-muted-foreground" />
+          </button>
+        )}
+        
         <div className="space-y-8">
           <div className="text-center space-y-3">
             <div className="text-5xl">🌞</div>
@@ -110,14 +120,7 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
           </div>
 
           {step === 'mood' && (
-            <div className="space-y-6 relative">
-              <button
-                onClick={onComplete}
-                className="absolute top-0 right-0 p-2 rounded-full hover:bg-muted/50 transition-colors z-10"
-                aria-label="Закрыть"
-              >
-                <X className="w-5 h-5 text-muted-foreground" />
-              </button>
+            <div className="space-y-6">
               <p className="text-center text-muted-foreground">
                 Выбери настроение
               </p>

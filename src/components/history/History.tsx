@@ -16,6 +16,28 @@ export const History = ({ onBack }: HistoryProps) => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [period, setPeriod] = useState<'week' | 'month' | 'all'>('week');
 
+  // Если нет чек-инов, показываем пустое состояние
+  if (checkIns.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-b from-background to-muted/30">
+        <div className="w-full max-w-md text-center space-y-8 animate-fade-in">
+          <div className="text-6xl">🤗</div>
+          <div className="space-y-3">
+            <h2 className="text-2xl font-semibold text-foreground">
+              Пока здесь ничего нет
+            </h2>
+            <p className="text-muted-foreground">
+              Начни отслеживать свои дни 🤗
+            </p>
+          </div>
+          <Button onClick={onBack} variant="outline" size="lg" className="min-w-[200px]">
+            ← Назад
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   const selectedCheckIn = checkIns.find(c => c.date === selectedDate);
 
   // Calculate stats based on period
