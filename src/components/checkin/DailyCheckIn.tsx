@@ -22,7 +22,7 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
     setActivities(prev =>
       prev.includes(id)
         ? prev.filter(a => a !== id)
-        : prev.length < 5
+        : prev.length < 10
         ? [...prev, id]
         : prev
     );
@@ -98,21 +98,21 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
               <p className="text-center text-muted-foreground">
                 Выбери настроение
               </p>
-              <div className="grid grid-cols-5 gap-3">
+              <div className="flex justify-center items-end gap-4">
                 {(Object.entries(MOOD_LABELS) as [string, typeof MOOD_LABELS[Mood]][]).map(([value, { emoji, label }]) => (
                   <button
                     key={value}
                     onClick={() => setMood(Number(value) as Mood)}
                     className={cn(
-                      "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all",
-                      "hover:shadow-md hover:scale-105",
+                      "flex flex-col items-center gap-2 transition-all duration-300",
+                      "hover:scale-110",
                       mood === Number(value)
-                        ? "border-primary bg-primary/5 shadow-md"
-                        : "border-border bg-card hover:border-primary/50"
+                        ? "scale-125"
+                        : "scale-100"
                     )}
                   >
-                    <span className="text-4xl">{emoji}</span>
-                    <span className="text-xs text-center">{label}</span>
+                    <span className="text-5xl">{emoji}</span>
+                    <span className="text-xs text-center text-muted-foreground">{label}</span>
                   </button>
                 ))}
               </div>
@@ -130,7 +130,7 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
           {step === 'activities' && (
             <div className="space-y-6">
               <p className="text-center text-muted-foreground">
-                Что было сегодня? (до 5 пунктов)
+                Что было сегодня? (до 10 пунктов)
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-2">
                 {ACTIVITIES.map(activity => (
@@ -150,13 +150,23 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
                   </button>
                 ))}
               </div>
-              <Button
-                onClick={() => setStep('note')}
-                size="lg"
-                className="w-full h-12 bg-primary hover:bg-primary/90"
-              >
-                Далее ➜
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => setStep('mood')}
+                  size="lg"
+                  variant="outline"
+                  className="flex-1 h-12"
+                >
+                  ← Назад
+                </Button>
+                <Button
+                  onClick={() => setStep('note')}
+                  size="lg"
+                  className="flex-1 h-12 bg-primary hover:bg-primary/90"
+                >
+                  Далее ➜
+                </Button>
+              </div>
             </div>
           )}
 
