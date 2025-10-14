@@ -21,7 +21,7 @@ export const Settings = ({ onBack, onReset }: SettingsProps) => {
     setFocuses(prev =>
       prev.includes(id)
         ? prev.filter(f => f !== id)
-        : prev.length < 5
+        : prev.length < 7
         ? [...prev, id]
         : prev
     );
@@ -65,7 +65,7 @@ export const Settings = ({ onBack, onReset }: SettingsProps) => {
 
           <div className="space-y-3">
             <h3 className="font-medium text-foreground">Что отслеживаешь</h3>
-            <p className="text-sm text-muted-foreground">Выбери от 3 до 5 пунктов</p>
+            <p className="text-sm text-muted-foreground">Выбери от 3 до 7 пунктов</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {FOCUS_OPTIONS.map(option => (
                 <button

@@ -15,7 +15,7 @@ export const FocusSelection = ({ name, onNext }: FocusSelectionProps) => {
     setSelected(prev =>
       prev.includes(id)
         ? prev.filter(f => f !== id)
-        : prev.length < 5
+        : prev.length < 7
         ? [...prev, id]
         : prev
     );
@@ -40,7 +40,7 @@ export const FocusSelection = ({ name, onNext }: FocusSelectionProps) => {
               Что для тебя сейчас важно отслеживать?
             </p>
             <p className="text-sm text-muted-foreground">
-              Выбери от 3 до 5 пунктов
+              Выбери от 3 до 7 пунктов
             </p>
           </div>
 
