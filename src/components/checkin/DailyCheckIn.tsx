@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { MOOD_LABELS, ACTIVITIES, POSITIVE_MESSAGES, CheckIn, Mood } from '@/types/checkin';
 import { cn } from '@/lib/utils';
-import { addCheckIn } from '@/lib/storage';
+import { addCheckIn, loadUserData } from '@/lib/storage';
 
 interface DailyCheckInProps {
   name: string;
@@ -17,6 +17,16 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
   const [activities, setActivities] = useState<string[]>([]);
   const [note, setNote] = useState('');
   const [message, setMessage] = useState('');
+
+  // Фильтруем активности на основе выбранных фокусов
+  const filteredActivities = useMemo(() => {
+    const userData = loadUserData();
+    if (!userData || !userData.focuses.length) return ACTIVITIES;
+    
+    return ACTIVITIES.filter(activity => 
+      activity.focuses.some(focus => userData.focuses.includes(focus))
+    );
+  }, []);
 
   const toggleActivity = (id: string) => {
     setActivities(prev =>
@@ -133,7 +143,7 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
                 Что было сегодня? (до 10 пунктов)
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-2">
-                {ACTIVITIES.map(activity => (
+                {filteredActivities.map(activity => (
                   <button
                     key={activity.id}
                     onClick={() => toggleActivity(activity.id)}

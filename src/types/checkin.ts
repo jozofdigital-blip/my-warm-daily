@@ -5,6 +5,7 @@ export interface Activity {
   label: string;
   emoji: string;
   category: string;
+  focuses: string[]; // связь с фокусами
 }
 
 export interface CheckIn {
@@ -37,27 +38,30 @@ export const FOCUS_OPTIONS = [
 ];
 
 export const ACTIVITIES: Activity[] = [
-  { id: 'work', label: 'Работа', emoji: '💼', category: 'productive' },
-  { id: 'study', label: 'Учёба', emoji: '📚', category: 'productive' },
-  { id: 'self-dev', label: 'Саморазвитие', emoji: '🌱', category: 'productive' },
-  { id: 'walk', label: 'Прогулка', emoji: '🚶', category: 'health' },
-  { id: 'workout', label: 'Тренировка', emoji: '🏃', category: 'health' },
-  { id: 'meditation', label: 'Медитация', emoji: '🧘', category: 'health' },
-  { id: 'sleep', label: 'Сон', emoji: '😴', category: 'health' },
-  { id: 'friends', label: 'Друзья', emoji: '👥', category: 'social' },
-  { id: 'family', label: 'Семья', emoji: '👨‍👩‍👧', category: 'social' },
-  { id: 'romance', label: 'Романтика', emoji: '💕', category: 'social' },
-  { id: 'music', label: 'Музыка', emoji: '🎵', category: 'leisure' },
-  { id: 'movie', label: 'Фильм', emoji: '🎬', category: 'leisure' },
-  { id: 'hobby', label: 'Хобби', emoji: '🎨', category: 'leisure' },
-  { id: 'nature', label: 'Природа', emoji: '🌿', category: 'leisure' },
-  { id: 'cleaning', label: 'Уборка', emoji: '🧹', category: 'chores' },
-  { id: 'cooking', label: 'Готовка', emoji: '🍳', category: 'chores' },
-  { id: 'shopping', label: 'Покупки', emoji: '🛒', category: 'chores' },
-  { id: 'stress', label: 'Стресс', emoji: '😤', category: 'feeling' },
-  { id: 'calm', label: 'Спокойствие', emoji: '😌', category: 'feeling' },
-  { id: 'gratitude', label: 'Благодарность', emoji: '🙏', category: 'feeling' },
-  { id: 'inspiration', label: 'Вдохновение', emoji: '✨', category: 'feeling' }
+  { id: 'work', label: 'Работа', emoji: '💼', category: 'productive', focuses: ['work', 'energy', 'balance'] },
+  { id: 'study', label: 'Учёба', emoji: '📚', category: 'productive', focuses: ['work', 'growth'] },
+  { id: 'self-dev', label: 'Саморазвитие', emoji: '🌱', category: 'productive', focuses: ['growth', 'hobby'] },
+  { id: 'walk', label: 'Прогулка', emoji: '🚶', category: 'health', focuses: ['energy', 'calm', 'balance'] },
+  { id: 'workout', label: 'Тренировка', emoji: '🏃', category: 'health', focuses: ['energy', 'balance'] },
+  { id: 'meditation', label: 'Медитация', emoji: '🧘', category: 'health', focuses: ['calm', 'balance'] },
+  { id: 'sleep', label: 'Сон', emoji: '😴', category: 'health', focuses: ['sleep', 'energy'] },
+  { id: 'water', label: 'Вода', emoji: '💧', category: 'health', focuses: ['nutrition', 'energy'] },
+  { id: 'healthy-food', label: 'Здоровая еда', emoji: '🥗', category: 'health', focuses: ['nutrition', 'energy'] },
+  { id: 'friends', label: 'Друзья', emoji: '👥', category: 'social', focuses: ['social', 'mood'] },
+  { id: 'family', label: 'Семья', emoji: '👨‍👩‍👧', category: 'social', focuses: ['social', 'mood'] },
+  { id: 'romance', label: 'Романтика', emoji: '💕', category: 'social', focuses: ['social', 'mood'] },
+  { id: 'music', label: 'Музыка', emoji: '🎵', category: 'leisure', focuses: ['hobby', 'mood'] },
+  { id: 'movie', label: 'Фильм', emoji: '🎬', category: 'leisure', focuses: ['hobby', 'balance'] },
+  { id: 'hobby', label: 'Хобби', emoji: '🎨', category: 'leisure', focuses: ['hobby', 'mood'] },
+  { id: 'nature', label: 'Природа', emoji: '🌿', category: 'leisure', focuses: ['calm', 'mood'] },
+  { id: 'cleaning', label: 'Уборка', emoji: '🧹', category: 'chores', focuses: ['balance'] },
+  { id: 'cooking', label: 'Готовка', emoji: '🍳', category: 'chores', focuses: ['nutrition', 'balance'] },
+  { id: 'shopping', label: 'Покупки', emoji: '🛒', category: 'chores', focuses: ['finance', 'balance'] },
+  { id: 'money-spent', label: 'Траты', emoji: '💸', category: 'chores', focuses: ['finance'] },
+  { id: 'stress', label: 'Стресс', emoji: '😤', category: 'feeling', focuses: ['calm', 'mood'] },
+  { id: 'calm', label: 'Спокойствие', emoji: '😌', category: 'feeling', focuses: ['calm', 'mood'] },
+  { id: 'gratitude', label: 'Благодарность', emoji: '🙏', category: 'feeling', focuses: ['gratitude', 'mood'] },
+  { id: 'inspiration', label: 'Вдохновение', emoji: '✨', category: 'feeling', focuses: ['hobby', 'gratitude'] }
 ];
 
 export const MOOD_LABELS = {

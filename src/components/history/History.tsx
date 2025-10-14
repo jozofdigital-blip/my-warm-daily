@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { loadUserData } from '@/lib/storage';
 import { MOOD_LABELS, ACTIVITIES } from '@/types/checkin';
 import { Calendar } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface HistoryProps {
   onBack: () => void;
@@ -13,18 +14,24 @@ export const History = ({ onBack }: HistoryProps) => {
   const userData = loadUserData();
   const checkIns = userData?.checkIns || [];
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [period, setPeriod] = useState<'week' | 'month' | 'all'>('week');
 
   const selectedCheckIn = checkIns.find(c => c.date === selectedDate);
 
-  // Calculate stats
-  const recentCheckIns = checkIns.slice(-7);
-  const avgMood = recentCheckIns.length > 0
-    ? (recentCheckIns.reduce((sum, c) => sum + c.mood, 0) / recentCheckIns.length).toFixed(1)
+  // Calculate stats based on period
+  const periodCheckIns = useMemo(() => {
+    if (period === 'week') return checkIns.slice(-7);
+    if (period === 'month') return checkIns.slice(-30);
+    return checkIns;
+  }, [checkIns, period]);
+
+  const avgMood = periodCheckIns.length > 0
+    ? (periodCheckIns.reduce((sum, c) => sum + c.mood, 0) / periodCheckIns.length).toFixed(1)
     : '0';
 
-  // Activity impact (simplified)
+  // Activity impact (simplified) - based on selected period
   const activityImpact = new Map<string, { total: number; count: number }>();
-  checkIns.forEach(checkIn => {
+  periodCheckIns.forEach(checkIn => {
     checkIn.activities.forEach(actId => {
       const current = activityImpact.get(actId) || { total: 0, count: 0 };
       activityImpact.set(actId, {
@@ -52,7 +59,7 @@ export const History = ({ onBack }: HistoryProps) => {
   return (
     <div className="min-h-screen p-6 bg-gradient-to-b from-background to-muted/30">
       <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-semibold text-foreground flex items-center gap-2">
               Мои дни 🌈
@@ -61,9 +68,34 @@ export const History = ({ onBack }: HistoryProps) => {
               Смотри, как менялось настроение
             </p>
           </div>
-          <Button onClick={onBack} variant="outline">
-            ← Назад
-          </Button>
+          <div className="flex items-center gap-3">
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => setPeriod('week')} 
+                variant={period === 'week' ? 'default' : 'outline'}
+                size="sm"
+              >
+                Неделя
+              </Button>
+              <Button 
+                onClick={() => setPeriod('month')} 
+                variant={period === 'month' ? 'default' : 'outline'}
+                size="sm"
+              >
+                Месяц
+              </Button>
+              <Button 
+                onClick={() => setPeriod('all')} 
+                variant={period === 'all' ? 'default' : 'outline'}
+                size="sm"
+              >
+                Всё время
+              </Button>
+            </div>
+            <Button onClick={onBack} variant="outline">
+              ← Назад
+            </Button>
+          </div>
         </div>
 
         {/* Calendar Grid */}
@@ -126,7 +158,7 @@ export const History = ({ onBack }: HistoryProps) => {
               <div className="text-5xl">{MOOD_LABELS[Math.round(Number(avgMood)) as 1 | 2 | 3 | 4 | 5].emoji}</div>
               <div className="text-3xl font-bold text-primary">{avgMood} / 5</div>
               <p className="text-sm text-muted-foreground">
-                за последние {recentCheckIns.length} {recentCheckIns.length === 1 ? 'день' : 'дней'}
+                {period === 'week' ? 'за неделю' : period === 'month' ? 'за месяц' : 'за всё время'} ({periodCheckIns.length} {periodCheckIns.length === 1 ? 'день' : 'дней'})
               </p>
             </div>
           </Card>
