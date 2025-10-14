@@ -156,7 +156,7 @@ export const History = ({ onBack }: HistoryProps) => {
           <Card className="p-6">
             <h2 className="text-xl font-semibold mb-4">Среднее настроение</h2>
             <div className="text-center space-y-2">
-              <div className="text-5xl animate-bounce">{MOOD_LABELS[Math.round(Number(avgMood)) as 1 | 2 | 3 | 4 | 5].emoji}</div>
+              <div className="text-5xl">{MOOD_LABELS[Math.round(Number(avgMood)) as 1 | 2 | 3 | 4 | 5].emoji}</div>
               <div className="text-3xl font-bold text-primary">{avgMood} / 5</div>
               <p className="text-sm text-muted-foreground">
                 {period === 'week' ? 'за неделю' : period === 'month' ? 'за месяц' : 'за всё время'} ({periodCheckIns.length} {periodCheckIns.length === 1 ? 'день' : 'дней'})
