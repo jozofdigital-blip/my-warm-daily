@@ -4,6 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { MOOD_LABELS, ACTIVITIES, POSITIVE_MESSAGES, CheckIn, Mood, FOCUS_OPTIONS } from '@/types/checkin';
 import { cn } from '@/lib/utils';
 import { addCheckIn, loadUserData } from '@/lib/storage';
+import { X } from 'lucide-react';
 
 interface DailyCheckInProps {
   name: string;
@@ -39,9 +40,7 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
     setActivities(prev =>
       prev.includes(id)
         ? prev.filter(a => a !== id)
-        : prev.length < 10
-        ? [...prev, id]
-        : prev
+        : [...prev, id]
     );
   };
 
@@ -111,7 +110,14 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
           </div>
 
           {step === 'mood' && (
-            <div className="space-y-6">
+            <div className="space-y-6 relative">
+              <button
+                onClick={onComplete}
+                className="absolute -top-2 -right-2 p-2 rounded-full hover:bg-muted/50 transition-colors"
+                aria-label="Закрыть"
+              >
+                <X className="w-5 h-5 text-muted-foreground" />
+              </button>
               <p className="text-center text-muted-foreground">
                 Выбери настроение
               </p>
@@ -133,31 +139,21 @@ export const DailyCheckIn = ({ name, onComplete, onViewHistory }: DailyCheckInPr
                   </button>
                 ))}
               </div>
-              <div className="flex gap-3">
-                <Button
-                  onClick={onComplete}
-                  size="lg"
-                  variant="outline"
-                  className="flex-1 h-12"
-                >
-                  ← Назад
-                </Button>
-                <Button
-                  onClick={() => setStep('activities')}
-                  disabled={!mood}
-                  size="lg"
-                  className="flex-1 h-12 bg-primary hover:bg-primary/90"
-                >
-                  Далее ➜
-                </Button>
-              </div>
+              <Button
+                onClick={() => setStep('activities')}
+                disabled={!mood}
+                size="lg"
+                className="w-full h-12 bg-primary hover:bg-primary/90"
+              >
+                Далее ➜
+              </Button>
             </div>
           )}
 
           {step === 'activities' && (
             <div className="space-y-6">
               <p className="text-center text-muted-foreground">
-                Что было сегодня? (до 10 пунктов)
+                Что было сегодня?
               </p>
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
                 {groupedActivities.map(({ focus, activities: focusActivities }) => (
